@@ -1,105 +1,309 @@
 import unittest
 import sys
 from pathlib import Path
-sys.path.append(r"..\src")
-from create_testing_folder import create_folders
+import shutil
 
-TEST_PLACE = Path('')
-TEST_CONFIG_FILE_SAMPLE_FOLDER = Path(r'./test_create_testing_folder_sample')
+sys.path.append(r"../src")
+from create_testing_folder import (
+    create_folders_with_config,
+    create_folders_with_default,
+)
 
+TEST_PLACE = Path(__file__).parent.joinpath("testplace")
+TEST_CONFIG_FILE_SAMPLE_FOLDER = Path(__file__).parent.joinpath(
+    "test_create_testing_folder_sample"
+)
+
+
+class TestCreateFolderWithDefaultOne(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        if TEST_PLACE.exists():
+            shutil.rmtree(TEST_PLACE)
+
+        TEST_PLACE.mkdir()
+        create_folders_with_default(
+            TEST_PLACE,
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        if TEST_PLACE.exists():
+            shutil.rmtree(TEST_PLACE)
+
+    def setUp(self):
+        self.project_folder = TEST_PLACE
+        self.test_case_folder = self.project_folder.joinpath("testcase_1")
+
+    def test_prject_folder_exist(self):
+        expected = True
+        self.assertEqual(self.project_folder.exists(), expected)
+
+    def test_sample_folder_exist(self):
+        expected = True
+        self.assertEqual(self.test_case_folder.joinpath("sample").exists(), expected)
+
+    def test_result_folder_exist(self):
+        expected = True
+        self.assertEqual(self.test_case_folder.joinpath("result").exists(), expected)
+
+    def test_log_folder_exist(self):
+        expected = True
+        self.assertEqual(self.test_case_folder.joinpath("log").exists(), expected)
+
+
+class TestCreateFolderWithDefaultFour(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        if TEST_PLACE.exists():
+            shutil.rmtree(TEST_PLACE)
+
+        TEST_PLACE.mkdir()
+        create_folders_with_default(
+            TEST_PLACE, 4
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        if TEST_PLACE.exists():
+            shutil.rmtree(TEST_PLACE)
+
+    def setUp(self):
+        self.project_folder = TEST_PLACE
+        folders = ["testcase_" + str(i + 1) for i in range(4)]
+        self.test_case_folder = [
+            self.project_folder.joinpath(folder) for folder in folders
+        ]
+
+    def test_project_folder_exist(self):
+        expected = True
+        self.assertEqual(self.project_folder.exists(), expected)
+
+    def test_testcase_folder_exist(self):
+        expected = True
+        for i in range(4):
+            with self.subTest(i=i):
+                self.assertEqual(self.test_case_folder[i].exists(), expected)
+
+    def test_sample_folder_exist(self):
+        expected = True
+        for i in range(4):
+            with self.subTest(i=i):
+                self.assertEqual(
+                    self.test_case_folder[i].joinpath("sample").exists(), expected
+                )
+
+    def test_result_folder_exist(self):
+        expected = True
+        for i in range(4):
+            with self.subTest(i=i):
+                self.assertEqual(
+                    self.test_case_folder[i].joinpath("result").exists(), expected
+                )
+
+    def test_log_folder_exist(self):
+        expected = True
+        for i in range(4):
+            with self.subTest(i=i):
+                self.assertEqual(
+                    self.test_case_folder[i].joinpath("log").exists(), expected
+                )
 
 class TestCreateFolderWithOneTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        if Path(TEST_PLACE).exists():
-            Path(TEST_PLACE).unlink()
-        create_folders(TEST_PLACE, case_num="1")
+        if TEST_PLACE.exists():
+            shutil.rmtree(TEST_PLACE)
+
+        TEST_PLACE.mkdir()
+        create_folders_with_config(
+            TEST_PLACE,
+            config_file=TEST_CONFIG_FILE_SAMPLE_FOLDER.joinpath("config_1.json"),
+        )
 
     @classmethod
     def tearDownClass(cls):
-        if Path(TEST_PLACE).exists():
-            Path(TEST_PLACE).unlink()
+        if TEST_PLACE.exists():
+            shutil.rmtree(TEST_PLACE)
 
     def setUp(self):
-        self.project_folder = Path(TEST_PLACE)
-        self.test_case_folder = self.project_folder.joinpath("test_case_1")
+        self.project_folder = TEST_PLACE
+        self.test_case_folder = self.project_folder.joinpath("testcase_1")
 
     def test_prject_folder_exist(self):
         expected = True
-        self.assertEqual(self.project_folder.exists() == expected)
+        self.assertEqual(self.project_folder.exists(), expected)
 
     def test_sample_folder_exist(self):
         expected = True
-        self.assertEqual(self.test_case_folder.joinpath(
-            "sample").exists() == expected)
+        self.assertEqual(self.test_case_folder.joinpath("sample").exists(), expected)
 
     def test_result_folder_exist(self):
         expected = True
-        self.assertEqual(self.test_case_folder.joinpath(
-            "result").exists() == expected)
+        self.assertEqual(self.test_case_folder.joinpath("result").exists(), expected)
 
     def test_log_folder_exist(self):
         expected = True
-        self.assertEqual(self.test_case_folder.joinpath(
-            "log").exists() == expected)
+        self.assertEqual(self.test_case_folder.joinpath("log").exists(), expected)
 
 
-class TestCreateFolderWithThreeTestCase(unittest.TestCase):
+class TestCreateFolderWithThreeTestCaseOneStruct(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        if Path(TEST_PLACE).exists():
-            Path(TEST_PLACE).unlink()
-        create_folders(TEST_PLACE, case_num="3")
+        if TEST_PLACE.exists():
+            shutil.rmtree(TEST_PLACE)
+
+        TEST_PLACE.mkdir()
+        create_folders_with_config(
+            TEST_PLACE,
+            config_file=TEST_CONFIG_FILE_SAMPLE_FOLDER.joinpath("config_2.json"),
+        )
 
     @classmethod
     def tearDownClass(cls):
-        if Path(TEST_PLACE).exists():
-            Path(TEST_PLACE).unlink()
+        if TEST_PLACE.exists():
+            shutil.rmtree(TEST_PLACE)
 
     def setUp(self):
-        self.project_folder = Path(TEST_PLACE)
-        self.test_case_folder_names = [
-            'test_case_' + str(i) for i in range(1, 4)]
+        self.project_folder = TEST_PLACE
+        folders = ["testcase_" + str(i + 1) for i in range(3)]
+        self.test_case_folder = [
+            self.project_folder.joinpath(folder) for folder in folders
+        ]
 
-    def test_prject_folder_exist(self):
+    def test_project_folder_exist(self):
         expected = True
-        self.assertEqual(self.project_folder.exists() == expected)
+        self.assertEqual(self.project_folder.exists(), expected)
+
+    def test_testcase_folder_exist(self):
+        expected = True
+        for i in range(3):
+            with self.subTest(i=i):
+                self.assertEqual(self.test_case_folder[i].exists(), expected)
 
     def test_sample_folder_exist(self):
         expected = True
-        for test_case_name in self.test_case_folder_names:
-            test_case_folder = self.project_folder.joinpath(test_case_name)
-            sample_folder = test_case_folder.joinpath("sample")
-            self.assertEqual(sample_folder.exists() == expected)
+        for i in range(3):
+            with self.subTest(i=i):
+                self.assertEqual(
+                    self.test_case_folder[i].joinpath("sample").exists(), expected
+                )
 
     def test_result_folder_exist(self):
         expected = True
-        for test_case_name in self.test_case_folder_names:
-            test_case_folder = self.project_folder.joinpath(test_case_name)
-            result_folder = test_case_folder.joinpath("result")
-            self.assertEqual(result_folder.exists() == expected)
+        for i in range(3):
+            with self.subTest(i=i):
+                self.assertEqual(
+                    self.test_case_folder[i].joinpath("result").exists(), expected
+                )
 
     def test_log_folder_exist(self):
         expected = True
-        for test_case_name in self.test_case_folder_names:
-            test_case_folder = self.project_folder.joinpath(test_case_name)
-            log_folder = test_case_folder.joinpath("log")
-            self.assertEqual(log_folder.exists() == expected)
+        for i in range(3):
+            with self.subTest(i=i):
+                self.assertEqual(
+                    self.test_case_folder[i].joinpath("log").exists(), expected
+                )
 
 
-class TestCreateFolderWithUserDefinedTestCase(unittest.TestCase):
+class TestCreateFolderWithThreeTestCaseTwoStruct(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        if Path(TEST_PLACE).exists():
-            Path(TEST_PLACE).unlink()
-        config_file = TEST_CONFIG_FILE_SAMPLE_FOLDER.joinpath('case_1.txt')
-        create_folders(TEST_PLACE, test_cases="user", config_file=config_file)
+        if TEST_PLACE.exists():
+            shutil.rmtree(TEST_PLACE)
+
+        TEST_PLACE.mkdir()
+        create_folders_with_config(
+            TEST_PLACE,
+            config_file=TEST_CONFIG_FILE_SAMPLE_FOLDER.joinpath("config_2.json"),
+        )
 
     @classmethod
     def tearDownClass(cls):
-        if Path(TEST_PLACE).exists():
-            Path(TEST_PLACE).unlink()
+        if TEST_PLACE.exists():
+            shutil.rmtree(TEST_PLACE)
+
+    def setUp(self):
+        self.project_folder = TEST_PLACE
+        folders = ["testcase_" + str(i + 1) for i in range(6)]
+        self.test_case_folder = [
+            self.project_folder.joinpath(folder) for folder in folders
+        ]
+
+    def test_project_folder_exist(self):
+        expected = True
+        self.assertEqual(self.project_folder.exists(), expected)
+
+    def test_testcase_folder_exist(self):
+        expected = True
+        for i in range(6):
+            with self.subTest(i=i):
+                self.assertEqual(self.test_case_folder[i].exists(), expected)
+
+    def test_sample_folder_exist(self):
+        expected = True
+        for i in range(6):
+            with self.subTest(i=i):
+                self.assertEqual(
+                    self.test_case_folder[i].joinpath("sample").exists(), expected
+                )
+
+    def test_result_folder_exist(self):
+        expected = True
+        for i in range(6):
+            with self.subTest(i=i):
+                self.assertEqual(
+                    self.test_case_folder[i].joinpath("result").exists(), expected
+                )
+
+    def test_log_folder_exist(self):
+        expected = True
+        for i in range(6):
+            with self.subTest(i=i):
+                self.assertEqual(
+                    self.test_case_folder[i].joinpath("log").exists(), expected
+                )
+
+    def test_sub_log_folder_unexist(self):
+        expected = False
+        for i in range(3):
+            with self.subTest(i=i):
+                self.assertEqual(
+                    self.test_case_folder[i]
+                    .joinpath("log")
+                    .joinpath("situation_1")
+                    .exists(),
+                    expected,
+                )
+            with self.subTest(i=i):
+                self.assertEqual(
+                    self.test_case_folder[i]
+                    .joinpath("log")
+                    .joinpath("situation_2")
+                    .exists(),
+                    expected,
+                )
+
+    def test_sub_log_folder_exist(self):
+        expected = True
+        for i in range(3, 6):
+            with self.subTest(i=i):
+                self.assertEqual(
+                    self.test_case_folder[i]
+                    .joinpath("log")
+                    .joinpath("situation_1")
+                    .exists(),
+                    expected,
+                )
+            with self.subTest(i=i):
+                self.assertEqual(
+                    self.test_case_folder[i]
+                    .joinpath("log")
+                    .joinpath("situation_2")
+                    .exists(),
+                    expected,
+                )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
