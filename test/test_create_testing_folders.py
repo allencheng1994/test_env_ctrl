@@ -3,7 +3,9 @@ import sys
 from pathlib import Path
 import shutil
 
-sys.path.append(r"../src")
+PROJECT_DIR = Path(__file__).parents[1]
+
+sys.path.append(str(PROJECT_DIR / "src"))
 from create_testing_folder import (
     create_folders_with_config,
     create_folders_with_default,
