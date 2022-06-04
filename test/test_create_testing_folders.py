@@ -3,7 +3,8 @@ import sys
 from pathlib import Path
 import shutil
 
-PROJECT_DIR = Path(__file__).parents[1]
+FILE = Path(__file__).resolve()
+PROJECT_DIR = Path(FILE).parents[1]
 
 sys.path.append(str(PROJECT_DIR / "src"))
 from create_testing_folder import (
