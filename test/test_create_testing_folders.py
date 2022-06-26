@@ -150,65 +150,6 @@ class TestCreateFolderWithOneTestCase(unittest.TestCase):
         self.assertEqual(self.test_case_folder.joinpath("log").exists(), expected)
 
 
-class TestCreateFolderWithThreeTestCaseOneStruct(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        if TEST_PLACE.exists():
-            shutil.rmtree(TEST_PLACE)
-
-        TEST_PLACE.mkdir()
-        create_folders_with_config(
-            TEST_PLACE,
-            config_file=TEST_CONFIG_FILE_SAMPLE_FOLDER.joinpath("config_2.json"),
-        )
-
-    @classmethod
-    def tearDownClass(cls):
-        if TEST_PLACE.exists():
-            shutil.rmtree(TEST_PLACE)
-
-    def setUp(self):
-        self.project_folder = TEST_PLACE
-        folders = ["testcase_" + str(i + 1) for i in range(3)]
-        self.test_case_folder = [
-            self.project_folder.joinpath(folder) for folder in folders
-        ]
-
-    def test_project_folder_exist(self):
-        expected = True
-        self.assertEqual(self.project_folder.exists(), expected)
-
-    def test_testcase_folder_exist(self):
-        expected = True
-        for i in range(3):
-            with self.subTest(i=i):
-                self.assertEqual(self.test_case_folder[i].exists(), expected)
-
-    def test_sample_folder_exist(self):
-        expected = True
-        for i in range(3):
-            with self.subTest(i=i):
-                self.assertEqual(
-                    self.test_case_folder[i].joinpath("sample").exists(), expected
-                )
-
-    def test_result_folder_exist(self):
-        expected = True
-        for i in range(3):
-            with self.subTest(i=i):
-                self.assertEqual(
-                    self.test_case_folder[i].joinpath("result").exists(), expected
-                )
-
-    def test_log_folder_exist(self):
-        expected = True
-        for i in range(3):
-            with self.subTest(i=i):
-                self.assertEqual(
-                    self.test_case_folder[i].joinpath("log").exists(), expected
-                )
-
-
 class TestCreateFolderWithThreeTestCaseTwoStruct(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
