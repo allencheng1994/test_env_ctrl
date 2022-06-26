@@ -62,9 +62,7 @@ class TestCreateFolderWithDefaultFour(unittest.TestCase):
             shutil.rmtree(TEST_PLACE)
 
         TEST_PLACE.mkdir()
-        create_folders_with_default(
-            TEST_PLACE, 4
-        )
+        create_folders_with_default(TEST_PLACE, 4)
 
     @classmethod
     def tearDownClass(cls):
@@ -111,6 +109,7 @@ class TestCreateFolderWithDefaultFour(unittest.TestCase):
                 self.assertEqual(
                     self.test_case_folder[i].joinpath("log").exists(), expected
                 )
+
 
 class TestCreateFolderWithOneTestCase(unittest.TestCase):
     @classmethod
